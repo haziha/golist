@@ -1,7 +1,5 @@
 package golist
 
-import "sync"
-
 func New[T any]() (e *List[T]) {
 	e = new(List[T])
 	e.Init()
@@ -9,14 +7,12 @@ func New[T any]() (e *List[T]) {
 }
 
 type List[T any] struct {
-	rwLock sync.RWMutex
-
 	len  int
 	head Element[T]
 	tail Element[T]
 }
 
-func (l *List[T]) Remove(e *Element[T]) (v *T) {
+func (l *List[T]) Remove(e *Element[T]) (v T) {
 	if e == nil || e.list != l {
 		return
 	}
@@ -33,7 +29,7 @@ func (l *List[T]) Remove(e *Element[T]) (v *T) {
 	return
 }
 
-func (l *List[T]) PushFront(v *T) (e *Element[T]) {
+func (l *List[T]) PushFront(v T) (e *Element[T]) {
 	e = new(Element[T])
 
 	e.next = l.head.next
@@ -48,7 +44,7 @@ func (l *List[T]) PushFront(v *T) (e *Element[T]) {
 	return
 }
 
-func (l *List[T]) PushBack(v *T) (e *Element[T]) {
+func (l *List[T]) PushBack(v T) (e *Element[T]) {
 	e = new(Element[T])
 
 	e.next = &l.tail
@@ -119,7 +115,7 @@ func (l *List[T]) Len() int {
 	return l.len
 }
 
-func (l *List[T]) InsertBefore(v *T, mark *Element[T]) (e *Element[T]) {
+func (l *List[T]) InsertBefore(v T, mark *Element[T]) (e *Element[T]) {
 	if mark.list != l || mark == nil {
 		return nil
 	}
@@ -138,7 +134,7 @@ func (l *List[T]) InsertBefore(v *T, mark *Element[T]) (e *Element[T]) {
 	return
 }
 
-func (l *List[T]) InsertAfter(v *T, mark *Element[T]) (e *Element[T]) {
+func (l *List[T]) InsertAfter(v T, mark *Element[T]) (e *Element[T]) {
 	if mark.list != l || mark == nil {
 		return nil
 	}
@@ -186,7 +182,7 @@ type Element[T any] struct {
 	next  *Element[T]
 	prev  *Element[T]
 	list  *List[T]
-	Value *T
+	Value T
 }
 
 func (e *Element[T]) Prev() *Element[T] {
